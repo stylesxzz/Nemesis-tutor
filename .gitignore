@@ -1,0 +1,19 @@
+# Python environments and bytecode
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+*.key
+
+# Build artifacts and editor files
+build/
+dist/
+*.spec
+.vscode/
+.idea/
+.DS_Store
