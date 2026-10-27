@@ -1,0 +1,5 @@
+# Algumas wheels Qt 6.10+ exigem SSE4.2 + POPCNT em Linux x86_64.
+# Fixamos Qt 6.9.3 para aumentar a compatibilidade com CPUs mais antigas.
+PySide6==6.9.3
+openai>=1.40.0
+keyring>=25.0.0
