@@ -24,7 +24,7 @@ A interface utiliza uma **bolinha flutuante** que abre um mini chat, sem depende
 ## Prévia da interface
 
 <div align="center">
-  <img src="assets/ui-preview.png" alt="Prévia conceitual da interface desktop do NEMESIS Tutor, com bolinha flutuante, mini chat, análise de tela e relatório" width="100%">
+  <img src="assets/ui-preview.svg" alt="Prévia conceitual da interface desktop do NEMESIS Tutor, com bolinha flutuante, mini chat, análise de tela e relatório" width="100%">
 </div>
 
 ## Funcionalidades
@@ -141,7 +141,7 @@ O ambiente virtual provavelmente está incompleto. O script de reparo recria **s
 ├── assets/
 │   ├── architecture.svg
 │   ├── nemesis-banner.svg
-│   └── ui-preview.png
+│   └── ui-preview.svg
 ├── main.py
 ├── requirements.txt
 ├── install_linux.sh
