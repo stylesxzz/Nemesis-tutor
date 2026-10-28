@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/nemesis-banner.svg" alt="NEMESIS Tutor — seu tutor de cibersegurança e pentest" width="100%">
   <br><br>
-  <p><strong>Um tutor desktop para aprender cibersegurança, interpretar resultados e documentar pentests autorizados.</strong></p>
+  <p><strong>Um tutor de cibersegurança com interfaces desktop e móvel para interpretar resultados e documentar pentests autorizados.</strong></p>
   <p>
     <img alt="Python" src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white">
     <img alt="PySide6" src="https://img.shields.io/badge/UI-PySide6-41CD52?style=for-the-badge&logo=qt&logoColor=white">
@@ -33,11 +33,13 @@ A versão desktop utiliza uma **bolinha flutuante** que abre um mini chat. Há t
 |---|---|
 | **Bolinha flutuante** | Fica acima das outras janelas e pode ser arrastada; clique para abrir ou ocultar o mini chat. |
 | **Tutor por chat** | Explica conceitos, parâmetros de comandos e saídas fornecidas pelo usuário, em português. |
+| **Interface Android** | Chat responsivo executado localmente pelo Termux, sem instalar PySide6/Qt. |
+| **Entrada por voz** | Dita mensagens em português pelo microfone quando o navegador oferece suporte; permite ouvir as respostas. |
 | **Análise de tela sob demanda** | Solicita confirmação antes de capturar a tela principal e encaminhar a imagem à API configurada. |
 | **Interpretação cautelosa** | Ajuda a separar observações visíveis, interpretações prováveis, incertezas e próximos passos. |
 | **Relatório Markdown** | Permite gerar, revisar e salvar documentação em .md com o material disponível. |
 | **Configuração de modelos** | IDs dos modelos de texto e visão podem ser alterados na janela de configurações. |
-| **Linux e Windows** | Inclui scripts de instalação e inicialização para os dois sistemas. |
+| **Linux, Windows e Android** | Scripts próprios para desktop e instalação simplificada pelo Termux no Android. |
 
 ## Arquitetura em alto nível
 
@@ -178,7 +180,7 @@ O ambiente virtual provavelmente está incompleto. O script de reparo recria **s
 - [ ] Testar instalação limpa em diferentes distribuições Linux e versões do Windows.
 - [ ] Validar endpoints e modelos disponíveis na NVIDIA no momento da execução.
 - [ ] Melhorar compatibilidade com captura de tela em sessões Wayland.
-- [ ] Adicionar testes automatizados para as rotas de chat, visão e geração de relatório.
+- [ ] Adicionar testes automatizados para as rotas de chat, visão, geração de relatório e interface móvel.
 - [ ] Refinar diagnósticos para falhas de rede, permissão e dependências Qt.
 
 ## Contribuição
