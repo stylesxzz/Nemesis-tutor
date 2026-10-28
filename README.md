@@ -197,3 +197,7 @@ Este projeto foi criado para educação, pesquisa e uso defensivo autorizado. A 
   <sub>Desenvolvido por <a href="https://github.com/stylesxzz">stylesxzz</a> · NEMESIS Tutor</sub><br>
   <sub>APRENDA · PRATIQUE · EVOLUA</sub>
 </div>
+
+## Licença
+
+Este projeto é distribuído sob a licença [MIT](LICENSE). Você pode usar, modificar e redistribuir o software, mantendo o aviso de copyright e o texto da licença. Consulte o arquivo `LICENSE` para os termos completos.
