@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash
 set -euo pipefail
 cd "$(dirname "$0")"
-if ! python -c "import flask, openai" >/dev/null 2>&1; then
+if ! python -c "import flask" >/dev/null 2>&1; then
   echo "Dependências ausentes. Execute primeiro: bash install_android.sh"
   exit 1
 fi
