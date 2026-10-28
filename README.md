@@ -6,7 +6,7 @@
     <img alt="Python" src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white">
     <img alt="PySide6" src="https://img.shields.io/badge/UI-PySide6-41CD52?style=for-the-badge&logo=qt&logoColor=white">
     <img alt="NVIDIA API" src="https://img.shields.io/badge/AI-NVIDIA%20API-76B900?style=for-the-badge&logo=nvidia&logoColor=white">
-    <img alt="Plataforma" src="https://img.shields.io/badge/Plataforma-Linux%20%7C%20Windows-555555?style=for-the-badge">
+    <img alt="Plataforma" src="https://img.shields.io/badge/Plataforma-Linux%20%7C%20Windows%20%7C%20Android-555555?style=for-the-badge">
   </p>
   <p><em>Aprenda · Pratique · Evolua</em></p>
 </div>
@@ -17,7 +17,7 @@
 
 O **NEMESIS Tutor** é um aplicativo desktop em Python com interface nativa. Ele foi pensado para acompanhar o estudo de segurança ofensiva responsável: você descreve o objetivo, compartilha comandos ou resultados e recebe uma explicação didática sobre evidências, hipóteses, limitações e próximos passos seguros.
 
-A interface utiliza uma **bolinha flutuante** que abre um mini chat, sem depender de uma página no navegador. Há também uma área de relatório para montar e exportar documentação em Markdown.
+A versão desktop utiliza uma **bolinha flutuante** que abre um mini chat. Há também uma área de relatório para montar e exportar documentação em Markdown. Para Android, o projeto inclui uma **interface web móvel** executada localmente pelo Termux, com ditado por microfone e leitura de respostas em voz alta.
 
 > **Estado do projeto:** protótipo em desenvolvimento. A imagem abaixo é uma prévia conceitual da interface — não uma captura de uma execução real. A disponibilidade de modelos, captura de tela e compatibilidade gráfica precisa ser validada no computador de destino.
 
@@ -56,9 +56,29 @@ A aplicação usa a API compatível com o formato OpenAI no endpoint <code>https
 
 **Importante:** a presença de um ID no aplicativo não garante que o endpoint esteja habilitado para sua conta. Modelos, limites, cotas, nomes e permissões podem mudar. Confirme a disponibilidade atual no [catálogo NVIDIA](https://build.nvidia.com/models) e use um modelo compatível com a tarefa. Uma chave NVIDIA válida é necessária para chamadas remotas.
 
+## Android (Termux)
+
+A versão para Android usa uma interface web responsiva, portanto **não instala PySide6/Qt**. Ela roda localmente no celular e abre no navegador. Não é um APK nativo; o Termux precisa permanecer aberto durante o uso.
+
+1. Instale o Termux de uma fonte oficial e abra-o.
+2. Instale Git e Python, baixe o projeto e execute o instalador:
+
+   <pre><code>pkg update
+pkg install -y git python
+git clone https://github.com/stylesxzz/Nemesis-tutor.git
+cd Nemesis-tutor
+bash install_android.sh
+bash start_android.sh</code></pre>
+
+3. O navegador deve abrir <code>http://127.0.0.1:8765</code>. Se não abrir automaticamente, digite esse endereço no navegador do próprio celular.
+4. Toque em **Configurar API NVIDIA**, informe sua chave e confira o ID do modelo. A chave fica apenas na memória enquanto o servidor está rodando; ao encerrar o processo, será necessário informá-la novamente.
+5. Toque no microfone para ditar, revise o texto reconhecido e toque em enviar. Para ouvir uma resposta, use **Ouvir**. O ditado depende do suporte do navegador e da permissão de microfone; em navegadores sem suporte, use o microfone do teclado Android.
+
+O servidor escuta apenas em <code>127.0.0.1</code>, não em outros dispositivos da rede. Não altere esse endereço para expor o aplicativo publicamente.
+
 ## Requisitos
 
-- Linux desktop (Debian, Ubuntu ou distribuição semelhante) ou Windows 10/11.
+- Linux desktop (Debian, Ubuntu ou distribuição semelhante) ou Windows 10/11 para a interface PySide6; Android usa a versão web via Termux.
 - Python **3.10 ou superior**. A instalação Linux fixa o PySide6 em <code>6.9.3</code> para evitar um requisito de instruções de CPU presente em algumas wheels Qt mais recentes.
 - Dependências listadas em <code>requirements.txt</code>.
 - Conexão à internet e uma chave de API NVIDIA com acesso a pelo menos um dos modelos configurados.
@@ -94,19 +114,16 @@ Se a instalação do Python da distribuição não tiver suporte a <code>venv</c
 
 ## Primeira utilização
 
-1. Inicie o NEMESIS Tutor e clique na bolinha com a letra **N**.
-2. Abra **Configurações (⚙)** e informe sua chave da API NVIDIA.
-3. Confira os IDs dos modelos. O modelo visual precisa aceitar entradas de imagem.
-4. Descreva o laboratório, o escopo autorizado e o que está tentando aprender.
-5. Cole manualmente a saída de um comando ou use **Analisar tela** quando quiser enviar uma captura.
-6. Revise as conclusões e as incertezas antes de usá-las.
-7. Na página **Relatório**, gere o documento e use **Salvar .md** para exportar.
+**Desktop:** inicie o NEMESIS Tutor, clique na bolinha com a letra **N**, configure a API NVIDIA, descreva o laboratório autorizado e envie uma pergunta ou evidência. Use **Analisar tela** somente quando quiser enviar uma captura; na página **Relatório**, gere e salve o documento em Markdown.
+
+**Android:** execute `bash start_android.sh` no Termux, abra `http://127.0.0.1:8765`, configure a API e envie mensagens por texto ou voz.
 
 ## Privacidade e segurança
 
 - A captura é iniciada manualmente e exige confirmação; o aplicativo não mantém gravação contínua da tela.
 - Quando você confirma uma captura, a imagem sai do computador e é enviada ao endpoint NVIDIA configurado. Oculte dados pessoais, senhas, tokens, chaves, mensagens privadas e informações confidenciais antes de enviar.
-- A chave pode ser fornecida pela variável de ambiente <code>NVIDIA_API_KEY</code>, informada na janela de configurações e, opcionalmente, guardada no cofre do sistema operacional, se o backend <code>keyring</code> estiver disponível. Não coloque chaves em commits, issues, capturas ou arquivos de documentação.
+- Na versão desktop, a chave pode vir da variável de ambiente <code>NVIDIA_API_KEY</code> ou da janela de configurações; opcionalmente, pode ser guardada no cofre do sistema operacional se o backend <code>keyring</code> estiver disponível. Na versão Android, a chave digitada fica somente na memória do processo. Não coloque chaves em commits, issues, capturas ou arquivos de documentação.
+- O ditado por voz é convertido em texto pelo recurso de reconhecimento de fala do navegador, conforme o suporte e as políticas desse navegador; a mensagem só é enviada à API NVIDIA quando você toca em enviar. A leitura em voz alta utiliza a síntese de voz do navegador.
 - O aplicativo **não executa comandos**, não controla teclado/mouse e não realiza pentests automaticamente. Você é responsável por decidir e executar cada ação.
 - Use somente em equipamentos próprios, laboratórios ou sistemas com autorização explícita. Evite ações destrutivas; registre escopo, evidências e limitações.
 - As respostas são auxílio educacional, não substituem validação manual, revisão técnica ou um relatório de auditoria independente.
@@ -143,6 +160,10 @@ O ambiente virtual provavelmente está incompleto. O script de reparo recria **s
 │   ├── nemesis-banner.svg
 │   └── ui-preview.svg
 ├── main.py
+├── mobile_app.py
+├── requirements-android.txt
+├── install_android.sh
+├── start_android.sh
 ├── requirements.txt
 ├── install_linux.sh
 ├── start_linux.sh
