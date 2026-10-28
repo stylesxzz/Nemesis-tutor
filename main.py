@@ -25,17 +25,23 @@ DEFAULT_TEXT_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
 DEFAULT_VISION_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
 SETTINGS = QSettings("Stylesxz", "NemesisTutor")
 
-SYSTEM_PROMPT = """Você é o NEMESIS Tutor, um instrutor de cibersegurança responsável.
-Responda em português brasileiro, explique o objetivo e os riscos das etapas,
-e ajude a interpretar somente os comandos, saídas, imagens e evidências que o
-usuário fornecer. Trabalhe apenas em sistemas próprios, laboratórios ou alvos
-com autorização explícita. Se o escopo não estiver claro, pergunte antes de
-orientar testes específicos. Não execute comandos nem afirme tê-los executado.
-Não oriente roubo ou exfiltração de dados, persistência, evasão, malware ou
-exploração destrutiva; redirecione para validação defensiva e remediação.
-Separe fatos visíveis, interpretação provável, incertezas/falsos positivos,
-próximo passo seguro e o que documentar. Nunca invente resultados ausentes.
-Não peça senhas, tokens ou chaves. Avise quando houver dados sensíveis visíveis.
+SYSTEM_PROMPT = """Você é o NEMESIS Tutor, instrutor de cibersegurança responsável.
+Responda em português brasileiro, de forma clara, direta e didática. Comece pela
+resposta principal. Evite introduções longas, repetir a pergunta, jargões sem
+explicação e listas extensas. Prefira parágrafos curtos. Em dúvidas simples,
+responda diretamente em 1 a 4 parágrafos. Use Markdown para organizar a resposta.
+Ao analisar evidências, use quando for útil:
+**Resumo:** conclusão principal em uma frase.
+**O que foi observado:** fatos presentes nos dados fornecidos.
+**O que isso pode significar:** interpretação provável, sem afirmar o que não foi comprovado.
+**O que falta confirmar:** incertezas e possíveis falsos positivos.
+**Próximo passo seguro:** uma ação objetiva e autorizada.
+Não precisa usar todas as seções em toda resposta. Explique comandos brevemente.
+Nunca invente resultados, não afirme que executou comandos e não peça senhas,
+tokens ou chaves. Oriente testes somente em laboratórios, sistemas próprios ou
+alvos com autorização explícita. Não ajude com roubo/exfiltração de dados,
+persistência, evasão, malware ou exploração destrutiva; priorize validação
+defensiva e remediação. Avise se houver dados sensíveis visíveis.
 """
 
 APP_STYLE = """
@@ -188,6 +194,7 @@ class MainWindow(QWidget):
         self.text_model = SETTINGS.value("text_model", DEFAULT_TEXT_MODEL)
         self.vision_model = SETTINGS.value("vision_model", DEFAULT_VISION_MODEL)
         self.history = []
+        self.transcript = []
         self.busy = False
         self.worker = None
         if not self.api_key:
@@ -331,8 +338,20 @@ class MainWindow(QWidget):
         self._set_status()
 
     def _add_message(self, speaker: str, text: str):
-        escaped = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\n", "<br>")
-        self.chat.append(f'<p><b>{speaker}</b><br>{escaped}</p>')
+        self.transcript.append((speaker, text))
+        markdown = []
+
+        for name, message in self.transcript:
+            markdown.append(f"### {name}\n\n{message}")
+
+        # QTextBrowser renderiza Markdown (títulos, listas e blocos de código),
+        # mantendo a conversa completa e deslocando a visualização ao fim.
+        bar = self.chat.verticalScrollBar()
+        old_value = bar.value()
+        was_at_bottom = old_value >= bar.maximum() - 8
+        self.chat.setMarkdown("\n\n---\n\n".join(markdown))
+        if was_at_bottom or len(self.transcript) == 1:
+            bar.setValue(bar.maximum())
 
     def _require_key(self):
         if not self.api_key:
