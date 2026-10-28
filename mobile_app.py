@@ -1,9 +1,10 @@
 """Interface web móvel do NEMESIS Tutor para Android/Termux."""
 from __future__ import annotations
+import json
 import os
 import secrets
+from urllib.request import Request, urlopen
 from flask import Flask, jsonify, render_template_string, request
-from openai import OpenAI
 
 NVIDIA_BASE_URL = "https://integrate.api.nvidia.com/v1"
 MODEL_ID = os.environ.get("NVIDIA_MODEL", "nvidia/nemotron-3-ultra-550b-a55b").strip()
@@ -139,12 +140,27 @@ def api_chat():
     if not messages or messages[-1]["role"] != "user":
         return jsonify(error="Digite uma pergunta antes de enviar."), 400
     try:
-        client = OpenAI(base_url=NVIDIA_BASE_URL, api_key=API_KEY, timeout=90.0, max_retries=1)
-        response = client.chat.completions.create(
-            model=MODEL_ID, messages=[{"role": "system", "content": SYSTEM_PROMPT}, *messages],
-            max_tokens=1600, temperature=0.45,
+        request_body = {
+            "model": MODEL_ID,
+            "messages": [{"role": "system", "content": SYSTEM_PROMPT}, *messages],
+            "max_tokens": 1600,
+            "temperature": 0.45,
+        }
+        api_request = Request(
+            NVIDIA_BASE_URL + "/chat/completions",
+            data=json.dumps(request_body).encode("utf-8"),
+            headers={
+                "Authorization": "Bearer " + API_KEY,
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            method="POST",
         )
-        return jsonify(answer=response.choices[0].message.content or "A API retornou uma resposta vazia.")
+        with urlopen(api_request, timeout=90.0) as api_response:
+            result = json.loads(api_response.read().decode("utf-8"))
+        choices = result.get("choices") or []
+        answer = choices[0].get("message", {}).get("content", "") if choices else ""
+        return jsonify(answer=answer or "A API retornou uma resposta vazia.")
     except Exception as exc:
         low = str(exc).lower()
         if "401" in low or "unauthorized" in low:
