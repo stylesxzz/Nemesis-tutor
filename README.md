@@ -183,6 +183,28 @@ O ambiente virtual provavelmente está incompleto. O script de reparo recria **s
 - [ ] Adicionar testes automatizados para as rotas de chat, visão, geração de relatório e interface móvel.
 - [ ] Refinar diagnósticos para falhas de rede, permissão e dependências Qt.
 
+
+## NEMESIS Pentest CLI (TypeScript)
+
+O repositório também inclui o pacote \`pentest-cli/\`, um companion CLI para revisão white-box e verificações de navegador com escopo explícito. Ele usa allowlist exata de hosts, login/2FA manual pelo Playwright e mantém sinais estáticos não verificados separados dos achados confirmados.
+
+\`\`\`bash
+cd pentest-cli
+npm install
+npx playwright install chromium
+npm run build
+npm link
+nemesis-pentest init
+# Edite nemesis-pentest.yml e confirme allowedHosts, rotas e caminhos de código.
+nemesis-pentest auth
+# Faça login e 2FA manualmente no navegador; pressione ENTER quando autenticado.
+nemesis-pentest scan
+\`\`\`
+
+A chave NVIDIA pode ser fornecida por \`NVIDIA_API_KEY\`. A análise de IA é opcional e explícita: \`NVIDIA_API_KEY=... nemesis-pentest scan --ai\`. Ela prioriza sinais estáticos; não transforma hipótese em vulnerabilidade confirmada. O CLI não executa brute force, payloads destrutivos ou testes fora do escopo.
+
+**Limitação importante:** nesta primeira versão, SQLi, SSRF, XSS e bypass de autenticação ainda não possuem validadores de exploração ativa. Portanto, não são reportados como confirmados. Um relatório sem achados não prova ausência de vulnerabilidades. Consulte [pentest-cli/README.md](pentest-cli/README.md) para detalhes.
+
 ## Contribuição
 
 Relate bugs e sugestões pela aba **Issues** do repositório. Ao abrir uma issue, inclua sistema operacional, versão do Python, mensagem de erro completa e os passos para reproduzir — **nunca** publique sua chave da API nem dados sensíveis de uma captura.
