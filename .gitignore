@@ -17,3 +17,9 @@ dist/
 .vscode/
 .idea/
 .DS_Store
+
+# NEMESIS Pentest CLI: scope, session cookies and reports
+.nemesis/
+pentest-cli/node_modules/
+pentest-cli/dist/
+pentest-cli/nemesis-pentest.yml
